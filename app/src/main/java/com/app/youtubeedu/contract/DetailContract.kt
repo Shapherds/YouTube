@@ -4,7 +4,7 @@ import com.app.youtubeedu.data.Video
 
 interface DetailContract {
 
-    interface Presenter : BaseContract.Presenter<BaseContract.View> {
+    interface Presenter : BaseContract.Presenter<View> {
 
         fun onBackClick()
 

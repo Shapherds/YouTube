@@ -18,4 +18,6 @@ interface BaseContract {
         fun showError(error: String)
     }
 
+    interface Router
+
 }
