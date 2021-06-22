@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="video_statistic_width">120dp</dimen>
+    <dimen name="video_statistic_height">60dp</dimen>
+    <dimen name="text_size">18sp</dimen>
+</resources>
