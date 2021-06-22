@@ -11,6 +11,8 @@ interface DetailContract {
         fun loadRelatedVideoList(video: Video)
 
         fun onItemClick(video: Video)
+
+        fun playVideo(video: Video)
     }
 
     interface View : BaseContract.View {
@@ -18,6 +20,8 @@ interface DetailContract {
         fun showRelatedVideoList(videoList: List<Video>)
 
         fun playVideo(video: Video)
+
+        fun setNewVideo(video: Video)
     }
 
     interface Router {
