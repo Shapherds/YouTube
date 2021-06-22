@@ -9,7 +9,7 @@ interface SearchContract {
         fun showVideoList(videoList: List<Video>)
     }
 
-    interface Presenter : BaseContract.Presenter<BaseContract.View> {
+    interface Presenter : BaseContract.Presenter<View> {
 
         fun onItemClick(video: Video)
 
