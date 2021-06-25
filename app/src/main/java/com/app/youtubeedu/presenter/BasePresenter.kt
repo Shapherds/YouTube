@@ -10,6 +10,7 @@ abstract class BasePresenter<T : BaseContract.View> : BaseContract.Presenter<T> 
 
     private val errorHandler = CoroutineExceptionHandler { _, exception ->
         Log.e("Logs", " catch error :  $exception")
+        view?.showError(exception.toString())
     }
 
     final override val coroutineContext = SupervisorJob() + Dispatchers.Main + errorHandler

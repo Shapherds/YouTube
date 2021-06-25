@@ -4,5 +4,5 @@ import com.app.youtubeedu.data.Video
 
 interface VideoByNameLoaderInteractor {
 
-    operator fun invoke(searchText: String): List<Video>
+    suspend operator fun invoke(searchText: String): List<Video>
 }
