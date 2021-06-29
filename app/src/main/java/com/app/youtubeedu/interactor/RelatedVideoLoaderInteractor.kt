@@ -4,5 +4,5 @@ import com.app.youtubeedu.data.Video
 
 interface RelatedVideoLoaderInteractor {
 
-    operator fun invoke(video: Video): List<Video>
+    suspend operator fun invoke(video: Video): List<Video>
 }
