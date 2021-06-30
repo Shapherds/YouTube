@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface VideoRepository {
 
-    fun getRelatedVideoList(video: Video): List<Video>
+    suspend fun getRelatedVideoList(video: Video): List<Video>
 
     fun getVideoList(): Flow<List<Video>>
 
-    fun getVideoListByName(searchText: String): List<Video>
+    suspend fun getVideoListByName(searchText: String): List<Video>
 }
