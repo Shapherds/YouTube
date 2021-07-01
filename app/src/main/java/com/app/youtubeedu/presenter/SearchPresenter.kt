@@ -4,22 +4,42 @@ import com.app.youtubeedu.contract.SearchContract
 import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.interactor.PopularVideoLoaderInteractor
 import com.app.youtubeedu.interactor.VideoByNameLoaderInteractor
+import com.app.youtubeedu.util.StringProvider
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class SearchPresenter(
     private val router: SearchContract.Router,
     private val videoByNameLoaderInteractor: VideoByNameLoaderInteractor,
-    private val popularVideoLoaderInteractor: PopularVideoLoaderInteractor
-) : BasePresenter<SearchContract.View>() {
+    private val popularVideoLoaderInteractor: PopularVideoLoaderInteractor,
+    stringProvider: StringProvider,
+) : BasePresenter<SearchContract.View>(stringProvider), SearchContract.Presenter {
 
-    fun onItemClick(video: Video){
-        TODO("not yet implemented")
+    override fun onItemClick(video: Video) {
+        router.openVideoDetails(video)
     }
 
-    fun loadVideoList(){
-        TODO("not yet implemented")
+    override fun loadVideoList() {
+        launch {
+            try {
+                view?.showProgress()
+                popularVideoLoaderInteractor().collect { value -> view?.showVideoList(value) }
+            } finally {
+                view?.hideProgress()
+            }
+        }
     }
 
-    fun searchListByName(searchText: String){
-        TODO("not yet implemented")
+    override fun searchVideoByName(searchText: String) {
+        launch {
+            try {
+                view?.showProgress()
+                val videoList = videoByNameLoaderInteractor(searchText)
+                view?.showVideoList(videoList)
+            } finally {
+                view?.hideProgress()
+            }
+        }
     }
+
 }

@@ -4,8 +4,10 @@ import com.app.youtubeedu.contract.DetailContract
 import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.error.NoInternetConnectionException
 import com.app.youtubeedu.interactor.RelatedVideoLoaderInteractor
+import com.app.youtubeedu.util.StringProvider
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -24,6 +26,9 @@ class VideoDetailsPresenterTest {
     @MockK
     private lateinit var testVideo: Video
 
+    @RelaxedMockK
+    private lateinit var srtingProvider: StringProvider
+
     private lateinit var detailsPresenter: VideoDetailsPresenter
     private lateinit var videoList: List<Video>
 
@@ -31,7 +36,7 @@ class VideoDetailsPresenterTest {
     private fun setup() {
         MockKAnnotations.init(this)
         videoList = listOf(mockk(), mockk(), mockk(), mockk())
-        detailsPresenter = VideoDetailsPresenter(videoLoaderInteractor, router)
+        detailsPresenter = VideoDetailsPresenter(videoLoaderInteractor, router, srtingProvider)
         detailsPresenter.attachView(view)
     }
 
@@ -98,7 +103,7 @@ class VideoDetailsPresenterTest {
 
     @Test
     fun testInternetConnectionRelatedVideo() {
-        coEvery { videoLoaderInteractor(testVideo) }.throws(NoInternetConnectionException())
+        coEvery { videoLoaderInteractor(testVideo) } throws(NoInternetConnectionException())
         val errorText = "No internet Connection"
 
         detailsPresenter.loadRelatedVideoList(testVideo)

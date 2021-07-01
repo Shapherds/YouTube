@@ -3,11 +3,13 @@ package com.app.youtubeedu.presenter
 import com.app.youtubeedu.contract.DetailContract
 import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.interactor.RelatedVideoLoaderInteractor
+import com.app.youtubeedu.util.StringProvider
 
 class VideoDetailsPresenter(
     private val interactor: RelatedVideoLoaderInteractor,
-    private val router: DetailContract.Router
-) : BasePresenter<DetailContract.View>(), DetailContract.Presenter {
+    private val router: DetailContract.Router,
+    stringProvider: StringProvider,
+) : BasePresenter<DetailContract.View>(stringProvider), DetailContract.Presenter {
 
     override fun onBackClick() {
         TODO("not yet implemented")
