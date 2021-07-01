@@ -42,7 +42,7 @@ class DetailsActivity :
         )
     }
 
-    override fun updateVideoDetails(video: Video) {
+    override fun showVideoData(video: Video) {
         uiBinding.videoNameTextView.text = video.name
         uiBinding.videoDescriptionTextView.text = video.description
         uiBinding.videoViewsTextView.text = convertStatsToString(video.views, this)
