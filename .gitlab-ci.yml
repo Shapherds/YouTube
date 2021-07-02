@@ -1,0 +1,38 @@
+variables:
+  BUILD_TOOLS_VERSION: 30.0.2
+
+image: mvn.nixdev.co/repository/docker-hosted/android:$BUILD_TOOLS_VERSION
+
+lint:
+  stage: check
+  script:
+    - ./gradlew lint
+  except:
+    - master
+    - dev
+
+test:
+  stage: check
+  script:
+    - ./gradlew test
+  artifacts:
+    when: always
+    reports:
+      junit: app/build/test-results/**/TEST-*.xml
+  except:
+    - master
+    - dev
+  allow_failure: true
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble
+  only:
+    - master
+    - dev
+
+
+stages:
+  - check
+  - build
