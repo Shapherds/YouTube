@@ -16,7 +16,7 @@ class YouTubeDataSourceImpl : YouTubeDataSource {
                 dislikes = 210
             ),
             Video(
-                name = "",
+                name = "some video name",
                 description = "some video description",
                 videoId = "234567890",
                 iconUri = "https://raw.githubusercontent.com/dimaTiurenkoJulper/datas/main/android.png",

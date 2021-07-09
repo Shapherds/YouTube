@@ -8,9 +8,10 @@ import com.app.youtubeedu.R
 import com.app.youtubeedu.contract.BaseContract
 import com.app.youtubeedu.presenter.BasePresenter
 
-abstract class BaseActivity<T : BasePresenter<BaseContract.View>> : AppCompatActivity(),
+abstract class BaseActivity<T : BasePresenter<out BaseContract.View>> : AppCompatActivity(),
     BaseContract.View {
 
+    @Suppress("LeakingThis")
     protected var presenter = createPresenter()
 
     @Suppress("DEPRECATION")
@@ -28,8 +29,10 @@ abstract class BaseActivity<T : BasePresenter<BaseContract.View>> : AppCompatAct
         super.onDestroy()
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun onAttachView() {
-        presenter.attachView(this)
+        val view = this as BaseActivity<BasePresenter<BaseContract.View>>
+        presenter.attachView(view)
     }
 
     private fun onDetachView() {

@@ -1,31 +1,42 @@
 package com.app.youtubeedu.presenter
 
+import com.app.youtubeedu.R
 import com.app.youtubeedu.contract.SearchContract
 import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.error.NoInternetConnectionException
 import com.app.youtubeedu.interactor.PopularVideoLoaderInteractor
 import com.app.youtubeedu.interactor.VideoByNameLoaderInteractor
+import com.app.youtubeedu.util.StringProvider
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class SearchPresenterTest{
+class SearchPresenterTest {
 
-    @MockK
+    @RelaxedMockK
     private lateinit var router: SearchContract.Router
 
-    @MockK
+    @RelaxedMockK
     private lateinit var searchInteractor: VideoByNameLoaderInteractor
 
-    @MockK
+    @RelaxedMockK
     private lateinit var popularVideoLoaderInteractor: PopularVideoLoaderInteractor
 
-    @MockK
+    @RelaxedMockK
     private lateinit var view: SearchContract.View
+
+    @MockK
+    private lateinit var srtingProvider: StringProvider
 
     private lateinit var searchPresenter: SearchPresenter
 
@@ -34,17 +45,26 @@ class SearchPresenterTest{
 
     private lateinit var videoList: List<Video>
 
+    @ExperimentalCoroutinesApi
     @BeforeEach
     private fun setup() {
         MockKAnnotations.init(this)
         videoList = listOf(mockk(), mockk(), mockk(), mockk())
-        searchPresenter = SearchPresenter(router, searchInteractor, popularVideoLoaderInteractor)
+        Dispatchers.setMain(TestCoroutineDispatcher())
+        searchPresenter =
+            SearchPresenter(router, searchInteractor, popularVideoLoaderInteractor, srtingProvider)
         searchPresenter.attachView(view)
     }
 
     @AfterEach
     private fun clearMock() {
         clearAllMocks()
+    }
+
+    @ExperimentalCoroutinesApi
+    @AfterEach
+    private fun resetDispatchers() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -54,7 +74,6 @@ class SearchPresenterTest{
         verifySequence {
             router.openVideoDetails(testVideo)
         }
-        confirmVerified(router)
     }
 
     @Test
@@ -69,7 +88,6 @@ class SearchPresenterTest{
             view.showVideoList(videoList)
             view.hideProgress()
         }
-        confirmVerified(view, popularVideoLoaderInteractor)
     }
 
     @Test
@@ -82,34 +100,34 @@ class SearchPresenterTest{
 
         searchPresenter.loadVideoList()
 
-        verifySequence {
-            popularVideoLoaderInteractor()
+        coVerifySequence {
             view.showProgress()
+            popularVideoLoaderInteractor()
             view.showVideoList(videoList)
             view.showVideoList(remoteVideoList)
             view.hideProgress()
         }
-        confirmVerified(view, popularVideoLoaderInteractor)
     }
 
     @Test
     fun testLoadVideoListWithLocalDataWithoutInternetConnection() {
+        val exception = NoInternetConnectionException()
+        val message = "mess"
         every { popularVideoLoaderInteractor() } returns flow {
             emit(videoList)
-            throw NoInternetConnectionException()
+            throw exception
         }
-        val errorText = "No internet Connection"
+        every{ srtingProvider.provideString(R.string.no_internet_message)} returns message
 
         searchPresenter.loadVideoList()
 
-        verifySequence {
-            popularVideoLoaderInteractor()
+        coVerifySequence {
             view.showProgress()
+            popularVideoLoaderInteractor()
             view.showVideoList(videoList)
-            view.showError(errorText)
             view.hideProgress()
+            view.showError(message)
         }
-        confirmVerified(view, popularVideoLoaderInteractor)
     }
 
     @Test
@@ -117,14 +135,14 @@ class SearchPresenterTest{
         val testSearch = "testString"
         coEvery { searchInteractor(testSearch) } returns videoList
 
-        searchPresenter.searchListByName(testSearch)
+        searchPresenter.searchVideoByName(testSearch)
 
-        verifySequence {
+        coVerifySequence {
             view.showProgress()
+            searchInteractor(testSearch)
             view.showVideoList(videoList)
             view.hideProgress()
         }
-        confirmVerified(view, searchInteractor)
     }
 
     @Test
@@ -133,47 +151,48 @@ class SearchPresenterTest{
         val emptyList = listOf<Video>()
         coEvery { searchInteractor(searchText) } returns emptyList
 
-        searchPresenter.searchListByName(searchText)
+        searchPresenter.searchVideoByName(searchText)
 
-        verifySequence {
+        coVerifySequence {
             view.showProgress()
-            view.showVideoList(videoList)
+            searchInteractor(searchText)
+            view.showVideoList(emptyList)
             view.hideProgress()
         }
-        confirmVerified(view, searchInteractor)
     }
 
     @Test
     fun testInternetConnectionInPopularLoader() {
-        every { popularVideoLoaderInteractor() }.throws(NoInternetConnectionException())
-        val errorText = "No internet Connection"
+        val exception = NoInternetConnectionException()
+        val message = "mess"
+        every { popularVideoLoaderInteractor() }.throws(exception)
+        every{ srtingProvider.provideString(R.string.no_internet_message)} returns message
 
         searchPresenter.loadVideoList()
 
-        verifySequence {
+        coVerifySequence {
             view.showProgress()
             popularVideoLoaderInteractor()
-            view.showError(errorText)
             view.hideProgress()
+            view.showError(message)
         }
-        confirmVerified(view, popularVideoLoaderInteractor)
     }
 
     @Test
     fun testInternetConnectionInSearchLoader() {
         val searchText = "name"
-        val errorText = "No internet Connection"
-        coEvery { searchInteractor(searchText) }.throws(NoInternetConnectionException())
+        val message = "mess"
+        val exception = NoInternetConnectionException()
+        coEvery { searchInteractor(searchText) } throws(exception)
+        every{ srtingProvider.provideString(R.string.no_internet_message)} returns message
 
-        searchPresenter.searchListByName(searchText)
+        searchPresenter.searchVideoByName(searchText)
 
         coVerifySequence {
             view.showProgress()
             searchInteractor(searchText)
-            view.showError(errorText)
             view.hideProgress()
+            view.showError(message)
         }
-        confirmVerified(view, searchInteractor)
     }
 }
-
