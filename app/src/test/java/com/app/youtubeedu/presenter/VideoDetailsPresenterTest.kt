@@ -105,7 +105,7 @@ class VideoDetailsPresenterTest {
 
         coVerifySequence {
             view.showProgress()
-            view.updateVideoDetails(testVideo)
+            view.showVideoData(testVideo)
             view.playVideo(testVideo)
             videoLoaderInteractor(testVideo)
             view.showRelatedVideoList(videoList)
@@ -135,7 +135,7 @@ class VideoDetailsPresenterTest {
 
         verifySequence {
             view.playVideo(testVideo)
-            view.updateVideoDetails(testVideo)
+            view.showVideoData(testVideo)
         }
     }
 }

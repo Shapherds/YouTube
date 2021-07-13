@@ -32,7 +32,7 @@ class DetailsPresenter(
         launch {
             try {
                 view?.showProgress()
-                view?.updateVideoDetails(video)
+                view?.showVideoData(video)
                 view?.playVideo(video)
                 val relatedVideoList = relatedVideoLoaderInteractor(video)
                 view?.showRelatedVideoList(relatedVideoList)
@@ -44,7 +44,7 @@ class DetailsPresenter(
 
     override fun playVideo(video: Video) {
         view?.playVideo(video)
-        view?.updateVideoDetails(video)
+        view?.showVideoData(video)
     }
 
 }
