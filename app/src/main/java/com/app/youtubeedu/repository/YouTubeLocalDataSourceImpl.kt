@@ -1,8 +1,9 @@
 package com.app.youtubeedu.repository
 
 import com.app.youtubeedu.data.Video
+import javax.inject.Inject
 
-class DatabaseDataSourceImpl: DatabaseDataSourse{
+class YouTubeLocalDataSourceImpl @Inject constructor() : YouTubeLocalDataSource {
 
     override suspend fun getLocalList(): List<Video> {
         return listOf(

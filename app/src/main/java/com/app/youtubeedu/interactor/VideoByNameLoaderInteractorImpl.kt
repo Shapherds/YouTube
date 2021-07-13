@@ -1,8 +1,9 @@
 package com.app.youtubeedu.interactor
 
 import com.app.youtubeedu.repository.VideoRepository
+import javax.inject.Inject
 
-class VideoByNameLoaderInteractorImpl(private val repository: VideoRepository) :
+class VideoByNameLoaderInteractorImpl @Inject constructor(private val repository: VideoRepository) :
     VideoByNameLoaderInteractor {
 
     override suspend fun invoke(searchText: String) = repository.getVideoListByName(searchText)

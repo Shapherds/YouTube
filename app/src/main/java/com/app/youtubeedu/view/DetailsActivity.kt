@@ -9,14 +9,11 @@ import com.app.youtubeedu.R
 import com.app.youtubeedu.contract.DetailContract
 import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.databinding.ActivityDetailsBinding
-import com.app.youtubeedu.interactor.RelatedVideoLoaderInteractorImpl
 import com.app.youtubeedu.presenter.DetailsPresenter
-import com.app.youtubeedu.repository.VideoRepositoryImpl
-import com.app.youtubeedu.router.DetailsRouter
 import com.app.youtubeedu.util.StatsConverter.convertStatsToString
-import com.app.youtubeedu.util.StringProviderImpl
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
+import javax.inject.Inject
 
 class DetailsActivity :
     BaseActivity<DetailsPresenter>(), DetailContract.View, YouTubePlayer.OnInitializedListener {
@@ -32,14 +29,6 @@ class DetailsActivity :
     override fun playVideo(video: Video) {
         youTubePlayer.cueVideo(video.videoId)
         youTubePlayer.play()
-    }
-
-    override fun createPresenter(): DetailsPresenter {
-        return DetailsPresenter(
-            DetailsRouter(this),
-            RelatedVideoLoaderInteractorImpl(VideoRepositoryImpl()),
-            StringProviderImpl(this)
-        )
     }
 
     override fun showVideoData(video: Video) {
