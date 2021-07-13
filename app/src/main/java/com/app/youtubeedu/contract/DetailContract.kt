@@ -21,7 +21,7 @@ interface DetailContract {
 
         fun playVideo(video: Video)
 
-        fun setNewVideo(video: Video)
+        fun updateVideoDetails(video: Video)
     }
 
     interface Router {

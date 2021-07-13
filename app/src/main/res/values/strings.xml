@@ -5,4 +5,8 @@
     <string name="search">Search</string>
     <string name="no_internet_message">No Internet Connection</string>
     <string name="something_wrong">Something went wrong</string>
+    <string name="playerError">Player error</string>
+    <string name="billion">%d B</string>
+    <string name="million">%d M</string>
+    <string name="thousand">%d K</string>
 </resources>
