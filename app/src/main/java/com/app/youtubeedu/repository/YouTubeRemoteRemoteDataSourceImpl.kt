@@ -36,6 +36,8 @@ class YouTubeRemoteRemoteDataSourceImpl @Inject constructor(private val youTube:
             val relatedRequest = youTube
                 .search()
                 .list("snippet")
+                .setKey(API_KEY)
+                .setMaxResults(20)
                 .setQ(searchText)
                 .setType("video")
                 .execute()
@@ -53,6 +55,8 @@ class YouTubeRemoteRemoteDataSourceImpl @Inject constructor(private val youTube:
             val relatedRequest = youTube
                 .search()
                 .list("snippet")
+                .setKey(API_KEY)
+                .setMaxResults(20)
                 .setRelatedToVideoId(video.videoId)
                 .setType("video")
                 .execute()
@@ -67,6 +71,7 @@ class YouTubeRemoteRemoteDataSourceImpl @Inject constructor(private val youTube:
         return youTube
             .videos()
             .list("snippet,contentDetails,statistics")
+            .setKey(API_KEY)
             .setId(item.id.videoId)
             .execute()
             .items
