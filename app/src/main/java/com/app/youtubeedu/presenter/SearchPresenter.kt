@@ -5,6 +5,7 @@ import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.interactor.PopularVideoLoaderInteractor
 import com.app.youtubeedu.interactor.VideoByNameLoaderInteractor
 import com.app.youtubeedu.util.StringProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +25,9 @@ class SearchPresenter @Inject constructor(
         launch {
             try {
                 view?.showProgress()
-                popularVideoLoaderInteractor().collect { value -> view?.showVideoList(value) }
+                popularVideoLoaderInteractor().collect { value ->
+                    view?.showVideoList(value)
+                }
             } finally {
                 view?.hideProgress()
             }

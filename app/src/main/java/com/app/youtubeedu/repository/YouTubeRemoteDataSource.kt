@@ -4,9 +4,9 @@ import com.app.youtubeedu.data.Video
 
 interface YouTubeRemoteDataSource {
 
-    fun getPopularVideo(): List<Video>
+    suspend fun getPopularVideo(): List<Video>
 
-    fun getVideoByName(searchText: String): List<Video>
+    suspend fun getVideoByName(searchText: String): List<Video>
 
-    fun getRelatedVideoList(video: Video): List<Video>
+    suspend fun getRelatedVideoList(video: Video): List<Video>
 }
