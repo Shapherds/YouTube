@@ -21,6 +21,7 @@ import javax.inject.Singleton
         AndroidInjectionModule::class,
         ActivityModule::class,
         YouTubeServiceModule::class,
+        DatabaseModule::class
     ]
 )
 interface DaggerComponent : AndroidInjector<DaggerApplication> {
