@@ -5,8 +5,9 @@ import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.interactor.RelatedVideoLoaderInteractor
 import com.app.youtubeedu.util.StringProvider
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailsPresenter(
+class DetailsPresenter @Inject constructor(
     private val router: DetailContract.Router,
     private val relatedVideoLoaderInteractor: RelatedVideoLoaderInteractor,
     stringProvider: StringProvider

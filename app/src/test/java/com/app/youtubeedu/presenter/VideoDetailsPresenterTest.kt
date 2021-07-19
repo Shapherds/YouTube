@@ -33,7 +33,7 @@ class VideoDetailsPresenterTest {
     private lateinit var testVideo: Video
 
     @RelaxedMockK
-    private lateinit var srtingProvider: StringProvider
+    private lateinit var stringProvider: StringProvider
 
     private lateinit var detailsPresenter: DetailsPresenter
     private lateinit var videoList: List<Video>
@@ -44,7 +44,7 @@ class VideoDetailsPresenterTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
         videoList = listOf(mockk(), mockk(), mockk(), mockk())
-        detailsPresenter = DetailsPresenter(router, videoLoaderInteractor, srtingProvider)
+        detailsPresenter = DetailsPresenter(router, videoLoaderInteractor, stringProvider)
         detailsPresenter.attachView(view)
     }
 
@@ -117,7 +117,7 @@ class VideoDetailsPresenterTest {
     fun testInternetConnectionRelatedVideo() {
         val message = "mess"
         coEvery { videoLoaderInteractor(testVideo) } throws NoInternetConnectionException()
-        every{ srtingProvider.provideString(R.string.no_internet_message)} returns message
+        every{ stringProvider.provideString(R.string.no_internet_message)} returns message
 
         detailsPresenter.loadRelatedVideoList(testVideo)
 

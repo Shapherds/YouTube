@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application android:theme="@style/AppTheme">
+    <application
+        android:name=".App"
+        android:theme="@style/AppTheme">
         <activity android:name=".view.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

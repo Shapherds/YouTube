@@ -1,8 +1,9 @@
 package com.app.youtubeedu.repository
 
 import com.app.youtubeedu.data.Video
+import javax.inject.Inject
 
-class YouTubeDataSourceImpl : YouTubeDataSource {
+class YouTubeRemoteRemoteDataSourceImpl @Inject constructor() : YouTubeRemoteDataSource {
 
     override fun getPopularVideo(): List<Video> {
         return listOf(

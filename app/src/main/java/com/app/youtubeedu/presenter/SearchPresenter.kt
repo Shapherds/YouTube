@@ -7,8 +7,9 @@ import com.app.youtubeedu.interactor.VideoByNameLoaderInteractor
 import com.app.youtubeedu.util.StringProvider
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchPresenter(
+class SearchPresenter @Inject constructor(
     private val router: SearchContract.Router,
     private val videoByNameLoaderInteractor: VideoByNameLoaderInteractor,
     private val popularVideoLoaderInteractor: PopularVideoLoaderInteractor,

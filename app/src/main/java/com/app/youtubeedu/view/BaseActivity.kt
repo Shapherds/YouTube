@@ -7,19 +7,20 @@ import androidx.appcompat.app.AppCompatActivity
 import com.app.youtubeedu.R
 import com.app.youtubeedu.contract.BaseContract
 import com.app.youtubeedu.presenter.BasePresenter
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 abstract class BaseActivity<T : BasePresenter<out BaseContract.View>> : AppCompatActivity(),
     BaseContract.View {
 
-    @Suppress("LeakingThis")
-    protected var presenter = createPresenter()
+    @Inject
+    lateinit var presenter: T
 
     @Suppress("DEPRECATION")
     private lateinit var progressDialog: ProgressDialog
 
-    protected abstract fun createPresenter(): T
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         onAttachView()
     }

@@ -7,26 +7,14 @@ import com.app.youtubeedu.R
 import com.app.youtubeedu.contract.SearchContract
 import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.databinding.ActivitySearchBinding
-import com.app.youtubeedu.interactor.PopularVideoLoaderInteractorImpl
-import com.app.youtubeedu.interactor.VideoByNameLoaderInteractorImpl
 import com.app.youtubeedu.presenter.SearchPresenter
-import com.app.youtubeedu.repository.VideoRepositoryImpl
-import com.app.youtubeedu.router.SearchRouter
-import com.app.youtubeedu.util.StringProviderImpl
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
 
     private lateinit var uiBinding: ActivitySearchBinding
     private lateinit var searchListAdapter: SearchListAdapter
-
-    override fun createPresenter(): SearchPresenter {
-        return SearchPresenter(
-            SearchRouter(this),
-            VideoByNameLoaderInteractorImpl(VideoRepositoryImpl()),
-            PopularVideoLoaderInteractorImpl(VideoRepositoryImpl()),
-            StringProviderImpl(this)
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
