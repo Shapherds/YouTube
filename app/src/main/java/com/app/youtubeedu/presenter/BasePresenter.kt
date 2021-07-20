@@ -13,7 +13,7 @@ abstract class BasePresenter<T : BaseContract.View>(private val stringProvider: 
     protected var view: T? = null
 
     private val errorHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e("Logs", " catch error :  $exception")
+        Log.e("Logs", " catch error : ", exception)
         when (exception) {
             is NoInternetConnectionException -> view?.showError(
                 stringProvider.provideString(

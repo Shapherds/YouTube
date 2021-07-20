@@ -46,11 +46,13 @@ class DetailsActivity :
     }
 
     override fun showVideoData(video: Video) {
-       uiBinding.videoNameTextView.text = video.name
+        uiBinding.detailsScrollView.smoothScrollTo(0, 0)
+        uiBinding.videoNameTextView.text = video.name
         uiBinding.videoDescriptionTextView.text = video.description
         uiBinding.videoViewsTextView.text = convertStatsToString(video.views, this)
         uiBinding.likesTextView.text = convertStatsToString(video.likes, this)
         uiBinding.dislikesTextView.text = convertStatsToString(video.dislikes, this)
+        presenter.loadRelatedVideoList(video)
     }
 
     override fun onInitializationSuccess(

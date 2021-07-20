@@ -8,32 +8,28 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import com.google.api.services.youtube.model.Video as YouTubeVideo
 
-class YouTubeRemoteRemoteDataSourceImpl @Inject constructor(private val youTube: YouTube) :
+class YouTubeRemoteDataSourceImpl @Inject constructor(private val youTube: YouTube) :
     YouTubeRemoteDataSource {
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun getPopularVideo(): List<Video> {
-        var resultList: List<Video>
+    override suspend fun getPopularVideo() =
         withContext(Dispatchers.IO) {
-            val popularRequest = youTube
+            youTube
                 .videos()
                 .list("snippet,contentDetails,statistics")
                 .setChart("mostPopular")
                 .setMaxResults(20)
                 .setKey(API_KEY)
                 .execute()
-            resultList = popularRequest.items.map { item ->
-                item.getVideo()
-            }
+                .items.map { item ->
+                    item.getVideo()
+                }
         }
-        return resultList
-    }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun getVideoByName(searchText: String): List<Video> {
-        var resultList: List<Video>
+    override suspend fun getVideoByName(searchText: String) =
         withContext(Dispatchers.IO) {
-            val relatedRequest = youTube
+            youTube
                 .search()
                 .list("snippet")
                 .setKey(API_KEY)
@@ -41,18 +37,15 @@ class YouTubeRemoteRemoteDataSourceImpl @Inject constructor(private val youTube:
                 .setQ(searchText)
                 .setType("video")
                 .execute()
-            resultList = relatedRequest.items.map { video ->
-                getVideoStatistic(video).getVideo()
-            }
+                .items.mapNotNull { video ->
+                    getVideoInfo(video)?.getVideo()
+                }
         }
-        return resultList
-    }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun getRelatedVideoList(video: Video): List<Video> {
-        var resultList: List<Video>
+    override suspend fun getRelatedVideoList(video: Video) =
         withContext(Dispatchers.IO) {
-            val relatedRequest = youTube
+            youTube
                 .search()
                 .list("snippet")
                 .setKey(API_KEY)
@@ -60,23 +53,19 @@ class YouTubeRemoteRemoteDataSourceImpl @Inject constructor(private val youTube:
                 .setRelatedToVideoId(video.videoId)
                 .setType("video")
                 .execute()
-            resultList = relatedRequest.items.map { video ->
-                getVideoStatistic(video).getVideo()
-            }
+                .items.mapNotNull { video ->
+                    getVideoInfo(video)?.getVideo()
+                }
         }
-        return resultList
-    }
 
-    private fun getVideoStatistic(item: SearchResult): YouTubeVideo {
-        return youTube
-            .videos()
-            .list("snippet,contentDetails,statistics")
-            .setKey(API_KEY)
-            .setId(item.id.videoId)
-            .execute()
-            .items
-            .first()
-    }
+    private fun getVideoInfo(item: SearchResult) = youTube
+        .videos()
+        .list("snippet,contentDetails,statistics")
+        .setKey(API_KEY)
+        .setId(item.id.videoId)
+        .execute()
+        .items
+        .firstOrNull()
 
     private fun YouTubeVideo.getVideo(): Video {
         return Video(
