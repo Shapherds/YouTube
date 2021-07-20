@@ -18,7 +18,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         super.onCreate(savedInstanceState)
         uiBinding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(uiBinding.root)
-        searchListAdapter = SearchListAdapter()
+        searchListAdapter = SearchListAdapter(presenter::onItemClick)
         uiBinding.recyclerView.adapter = searchListAdapter
         presenter.loadVideoList()
     }
@@ -30,7 +30,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 presenter.searchVideoByName(searchView.query.toString())
-                return false;
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {

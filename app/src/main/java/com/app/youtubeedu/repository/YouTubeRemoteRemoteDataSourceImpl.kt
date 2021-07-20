@@ -84,9 +84,9 @@ class YouTubeRemoteRemoteDataSourceImpl @Inject constructor(private val youTube:
             description = this.snippet.description,
             videoId = this.id,
             iconUri = this.snippet.thumbnails.medium.url,
-            views = this.statistics.likeCount?.toLong() ?: 0,
+            views = this.statistics.viewCount?.toLong() ?: 0,
             likes = this.statistics.likeCount?.toLong() ?: 0,
-            dislikes = this.statistics.likeCount?.toLong() ?: 0,
+            dislikes = this.statistics.dislikeCount?.toLong() ?: 0,
         )
     }
 

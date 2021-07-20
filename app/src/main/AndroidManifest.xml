@@ -8,7 +8,8 @@
     <application
         android:name=".App"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.SearchActivity"
+        <activity
+            android:name=".view.SearchActivity"
             android:theme="@style/AppTheme.Search">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,7 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.DetailsActivity" />
+        <activity
+            android:name=".view.DetailsActivity" />
     </application>
 
 </manifest>
