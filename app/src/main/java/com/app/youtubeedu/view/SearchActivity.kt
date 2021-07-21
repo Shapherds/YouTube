@@ -8,8 +8,6 @@ import com.app.youtubeedu.contract.SearchContract
 import com.app.youtubeedu.data.Video
 import com.app.youtubeedu.databinding.ActivitySearchBinding
 import com.app.youtubeedu.presenter.SearchPresenter
-import dagger.android.AndroidInjection
-import javax.inject.Inject
 
 class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
 
@@ -29,7 +27,16 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         menuInflater.inflate(R.menu.options_menu, menu)
         val searchViewItem = menu?.findItem(R.id.search)
         val searchView = searchViewItem?.actionView as SearchView
-        searchView.setOnSearchClickListener { presenter.searchVideoByName(searchView.query.toString()) }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                presenter.searchVideoByName(searchView.query.toString())
+                return false;
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
         return super.onCreateOptionsMenu(menu)
     }
 

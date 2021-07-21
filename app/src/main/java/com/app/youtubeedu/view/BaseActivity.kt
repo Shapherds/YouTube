@@ -2,6 +2,7 @@ package com.app.youtubeedu.view
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.app.youtubeedu.R
@@ -42,14 +43,17 @@ abstract class BaseActivity<T : BasePresenter<out BaseContract.View>> : AppCompa
 
     @Suppress("DEPRECATION")
     override fun showProgress() {
-        progressDialog = ProgressDialog(this).apply {
+        if (!::progressDialog.isInitialized) {
+            progressDialog = ProgressDialog(this)
+        }
+        if (!progressDialog.isShowing) progressDialog.apply {
             setMessage(getString(R.string.progress_message))
             show()
         }
     }
 
     override fun hideProgress() {
-        progressDialog.hide()
+        progressDialog.dismiss()
     }
 
     override fun showError(error: String) {

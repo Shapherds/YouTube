@@ -13,7 +13,6 @@ class VideoRepositoryImpl @Inject constructor(
 ) : VideoRepository {
 
     override suspend fun getRelatedVideoList(video: Video): List<Video> {
-        delay(1000)
         return remoteDataSource.getRelatedVideoList(video)
     }
 
@@ -25,7 +24,6 @@ class VideoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getVideoListByName(searchText: String): List<Video> {
-        delay(1000)
         return remoteDataSource.getVideoByName(searchText)
     }
 }
