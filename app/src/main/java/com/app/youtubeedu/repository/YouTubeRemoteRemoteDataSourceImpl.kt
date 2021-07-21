@@ -1,80 +1,92 @@
 package com.app.youtubeedu.repository
 
 import com.app.youtubeedu.data.Video
+import com.google.api.services.youtube.YouTube
+import com.google.api.services.youtube.model.SearchResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import com.google.api.services.youtube.model.Video as YouTubeVideo
 
-class YouTubeRemoteRemoteDataSourceImpl @Inject constructor() : YouTubeRemoteDataSource {
+class YouTubeRemoteRemoteDataSourceImpl @Inject constructor(private val youTube: YouTube) :
+    YouTubeRemoteDataSource {
 
-    override fun getPopularVideo(): List<Video> {
-        return listOf(
-            Video(
-                name = "some video name",
-                description = "some video description",
-                videoId = "123456789",
-                iconUri = "https://raw.githubusercontent.com/dimaTiurenkoJulper/datas/main/android.png",
-                views = 1000,
-                likes = 500,
-                dislikes = 210
-            ),
-            Video(
-                name = "some video name",
-                description = "some video description",
-                videoId = "234567890",
-                iconUri = "https://raw.githubusercontent.com/dimaTiurenkoJulper/datas/main/android.png",
-                views = 1100,
-                likes = 600,
-                dislikes = 220
-            ),
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun getPopularVideo(): List<Video> {
+        var resultList: List<Video>
+        withContext(Dispatchers.IO) {
+            val popularRequest = youTube
+                .videos()
+                .list("snippet,contentDetails,statistics")
+                .setChart("mostPopular")
+                .setMaxResults(20)
+                .setKey(API_KEY)
+                .execute()
+            resultList = popularRequest.items.map { item ->
+                item.getVideo()
+            }
+        }
+        return resultList
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun getVideoByName(searchText: String): List<Video> {
+        var resultList: List<Video>
+        withContext(Dispatchers.IO) {
+            val relatedRequest = youTube
+                .search()
+                .list("snippet")
+                .setQ(searchText)
+                .setType("video")
+                .execute()
+            resultList = relatedRequest.items.map { video ->
+                getVideoStatistic(video).getVideo()
+            }
+        }
+        return resultList
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun getRelatedVideoList(video: Video): List<Video> {
+        var resultList: List<Video>
+        withContext(Dispatchers.IO) {
+            val relatedRequest = youTube
+                .search()
+                .list("snippet")
+                .setRelatedToVideoId(video.videoId)
+                .setType("video")
+                .execute()
+            resultList = relatedRequest.items.map { video ->
+                getVideoStatistic(video).getVideo()
+            }
+        }
+        return resultList
+    }
+
+    private fun getVideoStatistic(item: SearchResult): YouTubeVideo {
+        return youTube
+            .videos()
+            .list("snippet,contentDetails,statistics")
+            .setId(item.id.videoId)
+            .execute()
+            .items
+            .first()
+    }
+
+    private fun YouTubeVideo.getVideo(): Video {
+        return Video(
+            name = this.snippet.title,
+            description = this.snippet.description,
+            videoId = this.id,
+            iconUri = this.snippet.thumbnails.medium.url,
+            views = this.statistics.likeCount?.toLong() ?: 0,
+            likes = this.statistics.likeCount?.toLong() ?: 0,
+            dislikes = this.statistics.likeCount?.toLong() ?: 0,
         )
     }
 
-    override fun getVideoByName(searchText: String): List<Video> {
-        return createSimpleList().filter { it.name.contains(searchText) }
-    }
+    companion object {
 
-    override fun getRelatedVideoList(video: Video): List<Video> {
-        return listOf(
-            Video(
-                name = "some video name",
-                description = "some video description",
-                videoId = "355274241",
-                iconUri = "https://raw.githubusercontent.com/dimaTiurenkoJulper/datas/main/android.png",
-                views = 1000,
-                likes = 500,
-                dislikes = 210
-            ),
-            Video(
-                name = "some video name",
-                description = "some video description ",
-                videoId = "2395723022",
-                iconUri = "https://raw.githubusercontent.com/dimaTiurenkoJulper/datas/main/android.png",
-                views = 1100,
-                likes = 600,
-                dislikes = 220
-            ),
-        )
-    }
-
-    private fun createSimpleList(): List<Video> {
-        return listOf(
-            Video(
-                name = "some video name",
-                description = "some video description",
-                videoId = "293452614",
-                iconUri = "https://raw.githubusercontent.com/dimaTiurenkoJulper/datas/main/android.png",
-                views = 1000,
-                likes = 500,
-                dislikes = 210
-            ),
-            Video(
-                name = "some video name",
-                description = "some video description",
-                videoId = "937450271",
-                iconUri = "https://raw.githubusercontent.com/dimaTiurenkoJulper/datas/main/android.png",
-                views = 1100,
-                likes = 600,
-                dislikes = 220
-            ),
-        )
+        private const val API_KEY = "AIzaSyByTm6Rjp-rGZ4wG9nu6o98y3ZSFbN1S8A"
     }
 }
