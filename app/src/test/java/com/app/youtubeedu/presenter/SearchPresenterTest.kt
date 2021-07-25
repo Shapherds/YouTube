@@ -166,7 +166,7 @@ class SearchPresenterTest {
         val exception = NoInternetConnectionException()
         val message = "mess"
         every { popularVideoLoaderInteractor() }.throws(exception)
-        every{ srtingProvider.provideString(R.string.no_internet_message)} returns message
+        every { srtingProvider.provideString(R.string.no_internet_message) } returns message
 
         searchPresenter.loadVideoList()
 
@@ -183,8 +183,8 @@ class SearchPresenterTest {
         val searchText = "name"
         val message = "mess"
         val exception = NoInternetConnectionException()
-        coEvery { searchInteractor(searchText) } throws(exception)
-        every{ srtingProvider.provideString(R.string.no_internet_message)} returns message
+        coEvery { searchInteractor(searchText) } throws (exception)
+        every { srtingProvider.provideString(R.string.no_internet_message) } returns message
 
         searchPresenter.searchVideoByName(searchText)
 

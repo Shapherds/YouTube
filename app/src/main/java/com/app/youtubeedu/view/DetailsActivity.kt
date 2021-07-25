@@ -80,7 +80,7 @@ class DetailsActivity :
 
     companion object {
 
-        private const val API_KEY = "AIzaSyByTm6Rjp-rGZ4wG9nu6o98y3ZSFbN1S8A"
+        private const val API_KEY = "some key"
         private const val VIDEO_INTENT_KEY = "video"
 
         fun newIntent(context: Context, video: Video): Intent {

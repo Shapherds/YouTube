@@ -10,7 +10,7 @@ import javax.inject.Inject
 class DetailsPresenter @Inject constructor(
     private val router: DetailContract.Router,
     private val relatedVideoLoaderInteractor: RelatedVideoLoaderInteractor,
-    stringProvider: StringProvider
+    stringProvider: StringProvider,
 ) : BasePresenter<DetailContract.View>(stringProvider), DetailContract.Presenter {
 
     override fun onBackClick() {

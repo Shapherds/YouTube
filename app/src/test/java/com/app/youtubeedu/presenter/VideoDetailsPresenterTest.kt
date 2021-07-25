@@ -117,7 +117,7 @@ class VideoDetailsPresenterTest {
     fun testInternetConnectionRelatedVideo() {
         val message = "mess"
         coEvery { videoLoaderInteractor(testVideo) } throws NoInternetConnectionException()
-        every{ stringProvider.provideString(R.string.no_internet_message)} returns message
+        every { stringProvider.provideString(R.string.no_internet_message) } returns message
 
         detailsPresenter.loadRelatedVideoList(testVideo)
 

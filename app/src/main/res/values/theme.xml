@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar"/>
+    <style name="Search" parent="Theme.AppCompat.DayNight">
+        <item name="android:windowBackground">@color/mainBackground</item>
+    </style>
 
-    <style name="AppTheme.Search" parent="Theme.AppCompat.DayNight"/>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/mainBackground</item>
+    </style>
+
+    <style name="TextAppearance.AppStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextAppearance.AppStyle.YouTubeStyle">
+        <item name="android:fontFamily">@font/yt_sans</item>
+    </style>
+
+    <style name="TextAppearance.AppStyle.Serif">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.AppStyle.Serif.Light">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="TextAppearance.AppStyle.Serif.Thin">
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="TextAppearance.AppStyle.Serif.Thin.small">
+        <item name="android:textSize">@dimen/view_count_size</item>
+    </style>
+
 </resources>

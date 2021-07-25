@@ -3,10 +3,11 @@
     <string name="progress_message">Loading</string>
     <string name="app_name">YouTube Edu</string>
     <string name="search">Search</string>
-    <string name="no_internet_message">No Internet Connection</string>
+    <string name="no_internet_message">Please check your internet connection and try again later</string>
     <string name="something_wrong">Something went wrong</string>
     <string name="playerError">Player error</string>
     <string name="billion">%d B</string>
     <string name="million">%d M</string>
     <string name="thousand">%d K</string>
+    <string name="nothing_to_show">Nothing to show for this request</string>
 </resources>

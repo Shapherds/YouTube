@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_margin"
-                android:textSize="@dimen/text_size"
+                android:textAppearance="@style/TextAppearance.AppStyle.YouTubeStyle"
                 app:layout_constraintTop_toBottomOf="@id/youTubePlayerFrameLayout"
                 tools:text="video name" />
 
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin"
-                android:textSize="@dimen/text_size"
+                android:textAppearance="@style/TextAppearance.AppStyle.Serif.Thin"
                 app:layout_constraintTop_toBottomOf="@id/videoNameTextView"
                 tools:text="views" />
 
@@ -47,7 +47,7 @@
                 android:layout_marginTop="@dimen/default_margin"
                 android:drawableTop="@drawable/ic_like"
                 android:gravity="center"
-                android:textSize="@dimen/text_size"
+                android:textAppearance="@style/TextAppearance.AppStyle.Serif.Light"
                 app:layout_constraintEnd_toStartOf="@id/dislikesTextView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/videoViewsTextView"
@@ -60,7 +60,7 @@
                 android:layout_marginTop="@dimen/default_margin"
                 android:drawableTop="@drawable/ic_dislike"
                 android:gravity="center"
-                android:textSize="@dimen/text_size"
+                android:textAppearance="@style/TextAppearance.AppStyle.Serif.Light"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/likesTextView"
                 app:layout_constraintTop_toBottomOf="@+id/videoViewsTextView"
@@ -71,9 +71,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_margin"
-                android:textSize="@dimen/text_size"
+                android:textAppearance="@style/TextAppearance.AppStyle.Serif"
                 app:layout_constraintTop_toBottomOf="@+id/likesTextView"
                 tools:text="video description" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

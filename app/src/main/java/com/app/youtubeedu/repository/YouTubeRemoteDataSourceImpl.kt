@@ -1,10 +1,16 @@
 package com.app.youtubeedu.repository
 
+import android.util.Log
 import com.app.youtubeedu.data.Video
+import com.app.youtubeedu.error.NoInternetConnectionException
 import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.model.SearchResult
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Inject
 import com.google.api.services.youtube.model.Video as YouTubeVideo
 
@@ -15,10 +21,28 @@ class YouTubeRemoteDataSourceImpl @Inject constructor(private val youTube: YouTu
     private var searchPageToken: String? = null
     private var relatedPageToken: String? = null
     private var savedQuery: String? = null
+    private val errorHandler = CoroutineExceptionHandler { _, exception ->
+        when (exception) {
+            is UnknownHostException -> {
+                Log.e("Error", "Catch error in data layer: ", exception)
+                throw NoInternetConnectionException()
+            }
+            is ConnectException -> {
+                Log.e("Error", "Connection refused: ", exception)
+                throw NoInternetConnectionException()
+            }
+            is SocketTimeoutException -> {
+                Log.e("Error", "Website is down: ", exception)
+                throw NoInternetConnectionException()
+            }
+        }
+    }
+
+    private val coroutineContext = Dispatchers.IO + errorHandler
 
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun getPopularVideo() =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineContext) {
             youTube
                 .videos()
                 .list("snippet,contentDetails,statistics")
@@ -36,7 +60,7 @@ class YouTubeRemoteDataSourceImpl @Inject constructor(private val youTube: YouTu
 
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun getVideoByName(query: String) =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineContext) {
             if (query != savedQuery) {
                 savedQuery = query
                 searchPageToken = null
@@ -57,7 +81,7 @@ class YouTubeRemoteDataSourceImpl @Inject constructor(private val youTube: YouTu
 
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun getRelatedVideoList(video: Video) =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineContext) {
             youTube
                 .search()
                 .list("snippet")
@@ -95,6 +119,6 @@ class YouTubeRemoteDataSourceImpl @Inject constructor(private val youTube: YouTu
 
     companion object {
 
-        private const val API_KEY = "AIzaSyByTm6Rjp-rGZ4wG9nu6o98y3ZSFbN1S8A"
+        private const val API_KEY = "some key"
     }
 }

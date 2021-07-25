@@ -2,6 +2,7 @@ package com.app.youtubeedu.view
 
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import com.app.youtubeedu.R
 import com.app.youtubeedu.contract.SearchContract
@@ -23,7 +24,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         uiBinding.recyclerView.adapter = searchListAdapter
         presenter.loadVideoList()
         uiBinding.swipeRefreshLayout.setOnRefreshListener {
-                savedQuery?.also { presenter::searchVideoByName } ?: presenter.loadVideoList()
+            savedQuery?.also(presenter::searchVideoByName) ?: presenter.loadVideoList()
         }
     }
 
@@ -46,7 +47,9 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
     }
 
     override fun showVideoList(videoList: List<Video>) {
-        searchListAdapter.submitList(videoList)
-        uiBinding.swipeRefreshLayout.isRefreshing = false
+        if (videoList.isNotEmpty()) {
+            searchListAdapter.submitList(videoList)
+            uiBinding.swipeRefreshLayout.isRefreshing = false
+        } else Toast.makeText(this, getString(R.string.nothing_to_show), Toast.LENGTH_SHORT).show()
     }
 }

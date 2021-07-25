@@ -14,16 +14,12 @@ class VideoRepositoryImpl @Inject constructor(
         return remoteDataSource.getRelatedVideoList(video)
     }
 
-    override fun getVideoList(): Flow<List<Video>> {
-        return flow {
-            emit(localDataSource.getLocalList())
-            val popularList = remoteDataSource.getPopularVideo()
-            emit(popularList)
-            localDataSource.saveLocalList(popularList)
-        }
+    override fun getVideoList(): Flow<List<Video>> = flow {
+        emit(localDataSource.getLocalList())
+        val popularList = remoteDataSource.getPopularVideo()
+        emit(popularList)
+        localDataSource.saveLocalList(popularList)
     }
 
-    override suspend fun getVideoListByName(query: String): List<Video> {
-        return remoteDataSource.getVideoByName(query)
-    }
+    override suspend fun getVideoListByName(query: String) = remoteDataSource.getVideoByName(query)
 }

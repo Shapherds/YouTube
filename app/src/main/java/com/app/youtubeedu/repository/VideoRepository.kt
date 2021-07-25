@@ -9,5 +9,5 @@ interface VideoRepository {
 
     fun getVideoList(): Flow<List<Video>>
 
-    suspend fun getVideoListByName(searchText: String): List<Video>
+    suspend fun getVideoListByName(query: String): List<Video>
 }

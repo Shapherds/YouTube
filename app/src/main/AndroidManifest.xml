@@ -7,10 +7,11 @@
 
     <application
         android:name=".App"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.SearchActivity"
-            android:theme="@style/AppTheme.Search">
+            android:theme="@style/Search">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
