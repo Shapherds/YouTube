@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.youtube.player.YouTubePlayerView
-            android:id="@+id/youTubePlayerView"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/youTubePlayerFrameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
             android:textSize="@dimen/text_size"
-            app:layout_constraintTop_toBottomOf="@id/youTubePlayerView"
+            app:layout_constraintTop_toBottomOf="@id/youTubePlayerFrameLayout"
             tools:text="video name" />
 
         <TextView
@@ -75,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
             app:layout_constraintTop_toBottomOf="@+id/videoDescriptionTextView"
+            app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/video_list_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.commit
 import com.app.youtubeedu.R
 import com.app.youtubeedu.contract.DetailContract
 import com.app.youtubeedu.data.Video
@@ -13,7 +14,7 @@ import com.app.youtubeedu.presenter.DetailsPresenter
 import com.app.youtubeedu.util.StatsConverter.convertStatsToString
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
-import javax.inject.Inject
+import com.google.android.youtube.player.YouTubePlayerSupportFragment
 
 class DetailsActivity :
     BaseActivity<DetailsPresenter>(), DetailContract.View, YouTubePlayer.OnInitializedListener {
@@ -21,6 +22,19 @@ class DetailsActivity :
     private lateinit var uiBinding: ActivityDetailsBinding
     private lateinit var searchListAdapter: SearchListAdapter
     private lateinit var youTubePlayer: YouTubePlayer
+    private val youTubePlayerFragment = YouTubePlayerSupportFragment()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        uiBinding = ActivityDetailsBinding.inflate(layoutInflater)
+        setContentView(uiBinding.root)
+        youTubePlayerFragment.initialize(API_KEY, this)
+        supportFragmentManager.commit {
+            replace(uiBinding.youTubePlayerFrameLayout.id, youTubePlayerFragment)
+        }
+        searchListAdapter = SearchListAdapter(presenter::onItemClick)
+        uiBinding.recyclerView.adapter = searchListAdapter
+    }
 
     override fun showRelatedVideoList(videoList: List<Video>) {
         searchListAdapter.submitList(videoList)
@@ -32,26 +46,11 @@ class DetailsActivity :
     }
 
     override fun showVideoData(video: Video) {
-        uiBinding.videoNameTextView.text = video.name
+       uiBinding.videoNameTextView.text = video.name
         uiBinding.videoDescriptionTextView.text = video.description
         uiBinding.videoViewsTextView.text = convertStatsToString(video.views, this)
         uiBinding.likesTextView.text = convertStatsToString(video.likes, this)
         uiBinding.dislikesTextView.text = convertStatsToString(video.dislikes, this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        uiBinding = ActivityDetailsBinding.inflate(layoutInflater)
-        setContentView(uiBinding.root)
-        initializePlayer()
-        searchListAdapter = SearchListAdapter()
-        uiBinding.recyclerView.adapter = searchListAdapter
-        val video: Video = intent.getParcelableExtra(VIDEO_INTENT_KEY)!!
-        presenter.playVideo(video)
-    }
-
-    private fun initializePlayer() {
-        TODO("not yet implemented , will be in task ~ 12")
     }
 
     override fun onInitializationSuccess(
@@ -60,6 +59,8 @@ class DetailsActivity :
         wasRestored: Boolean,
     ) {
         youTubePlayer = player
+        val video: Video = intent.getParcelableExtra(VIDEO_INTENT_KEY)!!
+        presenter.playVideo(video)
     }
 
     override fun onInitializationFailure(
@@ -72,6 +73,7 @@ class DetailsActivity :
 
     companion object {
 
+        private const val API_KEY = "AIzaSyByTm6Rjp-rGZ4wG9nu6o98y3ZSFbN1S8A"
         private const val VIDEO_INTENT_KEY = "video"
 
         fun newIntent(context: Context, video: Video): Intent {
