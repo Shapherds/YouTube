@@ -1,82 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/detailsScrollView"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+        android:id="@+id/detailsScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/youTubePlayerFrameLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_margin"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/videoNameTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_margin"
-            android:textSize="@dimen/text_size"
-            app:layout_constraintTop_toBottomOf="@id/youTubePlayerFrameLayout"
-            tools:text="video name" />
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/youTubePlayerFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/videoViewsTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
-            android:textSize="@dimen/text_size"
-            app:layout_constraintTop_toBottomOf="@id/videoNameTextView"
-            tools:text="views" />
+            <TextView
+                android:id="@+id/videoNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintTop_toBottomOf="@id/youTubePlayerFrameLayout"
+                tools:text="video name" />
 
-        <TextView
-            android:id="@+id/likesTextView"
-            android:layout_width="@dimen/video_statistic_width"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
-            android:drawableTop="@drawable/ic_like"
-            android:gravity="center"
-            android:textSize="@dimen/text_size"
-            app:layout_constraintEnd_toStartOf="@id/dislikesTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/videoViewsTextView"
-            tools:text="25 k" />
+            <TextView
+                android:id="@+id/videoViewsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintTop_toBottomOf="@id/videoNameTextView"
+                tools:text="views" />
 
-        <TextView
-            android:id="@+id/dislikesTextView"
-            android:layout_width="@dimen/video_statistic_width"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
-            android:drawableTop="@drawable/ic_dislike"
-            android:gravity="center"
-            android:textSize="@dimen/text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/likesTextView"
-            app:layout_constraintTop_toBottomOf="@+id/videoViewsTextView"
-            tools:text="5 k" />
+            <TextView
+                android:id="@+id/likesTextView"
+                android:layout_width="@dimen/video_statistic_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:drawableTop="@drawable/ic_like"
+                android:gravity="center"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintEnd_toStartOf="@id/dislikesTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/videoViewsTextView"
+                tools:text="25 k" />
 
-        <TextView
-            android:id="@+id/videoDescriptionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_margin"
-            android:textSize="@dimen/text_size"
-            app:layout_constraintTop_toBottomOf="@+id/likesTextView"
-            tools:text="video description" />
+            <TextView
+                android:id="@+id/dislikesTextView"
+                android:layout_width="@dimen/video_statistic_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:drawableTop="@drawable/ic_dislike"
+                android:gravity="center"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/likesTextView"
+                app:layout_constraintTop_toBottomOf="@+id/videoViewsTextView"
+                tools:text="5 k" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_margin"
-            app:layout_constraintTop_toBottomOf="@+id/videoDescriptionTextView"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/video_list_item" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/videoDescriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintTop_toBottomOf="@+id/likesTextView"
+                tools:text="video description" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/videoDescriptionTextView"
+                tools:listitem="@layout/video_list_item" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

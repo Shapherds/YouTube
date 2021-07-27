@@ -33,11 +33,11 @@ class SearchPresenter @Inject constructor(
         }
     }
 
-    override fun searchVideoByName(searchText: String) {
+    override fun searchVideoByName(query: String) {
         launch {
             try {
                 view?.showProgress()
-                val videoList = videoByNameLoaderInteractor(searchText)
+                val videoList = videoByNameLoaderInteractor(query)
                 view?.showVideoList(videoList)
             } finally {
                 view?.hideProgress()

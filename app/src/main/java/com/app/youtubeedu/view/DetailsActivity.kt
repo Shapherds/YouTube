@@ -23,6 +23,7 @@ class DetailsActivity :
     private lateinit var searchListAdapter: SearchListAdapter
     private lateinit var youTubePlayer: YouTubePlayer
     private val youTubePlayerFragment = YouTubePlayerSupportFragment()
+    private lateinit var currentVideo: Video
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +35,14 @@ class DetailsActivity :
         }
         searchListAdapter = SearchListAdapter(presenter::onItemClick)
         uiBinding.recyclerView.adapter = searchListAdapter
+        uiBinding.swipeRefreshLayout.setOnRefreshListener {
+            presenter.loadRelatedVideoList(currentVideo)
+        }
     }
 
     override fun showRelatedVideoList(videoList: List<Video>) {
         searchListAdapter.submitList(videoList)
+        uiBinding.swipeRefreshLayout.isRefreshing = false
     }
 
     override fun playVideo(video: Video) {
@@ -61,8 +66,8 @@ class DetailsActivity :
         wasRestored: Boolean,
     ) {
         youTubePlayer = player
-        val video: Video = intent.getParcelableExtra(VIDEO_INTENT_KEY)!!
-        presenter.playVideo(video)
+        currentVideo = intent.getParcelableExtra(VIDEO_INTENT_KEY)!!
+        presenter.playVideo(currentVideo)
     }
 
     override fun onInitializationFailure(

@@ -6,5 +6,5 @@ import javax.inject.Inject
 class VideoByNameLoaderInteractorImpl @Inject constructor(private val repository: VideoRepository) :
     VideoByNameLoaderInteractor {
 
-    override suspend fun invoke(searchText: String) = repository.getVideoListByName(searchText)
+    override suspend fun invoke(query: String) = repository.getVideoListByName(query)
 }

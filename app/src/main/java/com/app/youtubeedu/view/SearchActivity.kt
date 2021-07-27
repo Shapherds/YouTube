@@ -11,6 +11,7 @@ import com.app.youtubeedu.presenter.SearchPresenter
 
 class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
 
+    private var savedQuery: String? = null
     private lateinit var uiBinding: ActivitySearchBinding
     private lateinit var searchListAdapter: SearchListAdapter
 
@@ -21,6 +22,9 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         searchListAdapter = SearchListAdapter(presenter::onItemClick)
         uiBinding.recyclerView.adapter = searchListAdapter
         presenter.loadVideoList()
+        uiBinding.swipeRefreshLayout.setOnRefreshListener {
+                savedQuery?.also { presenter::searchVideoByName } ?: presenter.loadVideoList()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -28,7 +32,8 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         val searchViewItem = menu?.findItem(R.id.search)
         val searchView = searchViewItem?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                savedQuery = query
                 presenter.searchVideoByName(searchView.query.toString())
                 return false
             }
@@ -42,5 +47,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
 
     override fun showVideoList(videoList: List<Video>) {
         searchListAdapter.submitList(videoList)
+        uiBinding.swipeRefreshLayout.isRefreshing = false
     }
 }

@@ -11,6 +11,11 @@ import com.google.api.services.youtube.model.Video as YouTubeVideo
 class YouTubeRemoteDataSourceImpl @Inject constructor(private val youTube: YouTube) :
     YouTubeRemoteDataSource {
 
+    private var popularPageToken: String? = null
+    private var searchPageToken: String? = null
+    private var relatedPageToken: String? = null
+    private var savedQuery: String? = null
+
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun getPopularVideo() =
         withContext(Dispatchers.IO) {
@@ -18,28 +23,36 @@ class YouTubeRemoteDataSourceImpl @Inject constructor(private val youTube: YouTu
                 .videos()
                 .list("snippet,contentDetails,statistics")
                 .setChart("mostPopular")
+                .apply { if (popularPageToken != null) pageToken = popularPageToken }
                 .setMaxResults(20)
                 .setKey(API_KEY)
                 .execute()
-                .items.map { item ->
+                .apply { popularPageToken = nextPageToken }
+                .items
+                .map { item ->
                     item.getVideo()
                 }
         }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun getVideoByName(searchText: String) =
+    override suspend fun getVideoByName(query: String) =
         withContext(Dispatchers.IO) {
+            if (query != savedQuery) {
+                savedQuery = query
+                searchPageToken = null
+            }
             youTube
                 .search()
                 .list("snippet")
+                .apply { if (searchPageToken != null) pageToken = searchPageToken }
                 .setKey(API_KEY)
                 .setMaxResults(20)
-                .setQ(searchText)
+                .setQ(query)
                 .setType("video")
                 .execute()
-                .items.mapNotNull { video ->
-                    getVideoInfo(video)?.getVideo()
-                }
+                .apply { searchPageToken = nextPageToken }
+                .items
+                .mapNotNull { getVideoInfo(it)?.getVideo() }
         }
 
     @Suppress("BlockingMethodInNonBlockingContext")
@@ -48,14 +61,15 @@ class YouTubeRemoteDataSourceImpl @Inject constructor(private val youTube: YouTu
             youTube
                 .search()
                 .list("snippet")
+                .apply { if (relatedPageToken != null) pageToken = relatedPageToken }
                 .setKey(API_KEY)
                 .setMaxResults(20)
                 .setRelatedToVideoId(video.videoId)
                 .setType("video")
                 .execute()
-                .items.mapNotNull { video ->
-                    getVideoInfo(video)?.getVideo()
-                }
+                .apply { relatedPageToken = nextPageToken }
+                .items
+                .mapNotNull { getVideoInfo(it)?.getVideo() }
         }
 
     private fun getVideoInfo(item: SearchResult) = youTube

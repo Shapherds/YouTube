@@ -23,7 +23,7 @@ class VideoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getVideoListByName(searchText: String): List<Video> {
-        return remoteDataSource.getVideoByName(searchText)
+    override suspend fun getVideoListByName(query: String): List<Video> {
+        return remoteDataSource.getVideoByName(query)
     }
 }
